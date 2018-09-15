@@ -280,25 +280,25 @@
     
 
     
-    \section{Import des Netzwerks für das
-Modell}\label{import-des-netzwerks-fuxfcr-das-modell}
-
-    \subsubsection{Einrichtung}\label{einrichtung}
+    \section{Import of data, network creation and
+optimization}\label{import-of-data-network-creation-and-optimization}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}30}]:} \PY{k+kn}{from} \PY{n+nn}{\PYZus{}\PYZus{}future\PYZus{}\PYZus{}} \PY{k}{import} \PY{n}{print\PYZus{}function}\PY{p}{,} \PY{n}{division}
-         \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
-         \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
-         \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
-         \PY{k+kn}{from} \PY{n+nn}{datetime} \PY{k}{import} \PY{n}{datetime}
-         \PY{k+kn}{import} \PY{n+nn}{math}
-         \PY{k+kn}{import} \PY{n+nn}{random}
-         \PY{k+kn}{import} \PY{n+nn}{dill} \PY{c+c1}{\PYZsh{} Transfer data for analysis}
-         
-         \PY{k+kn}{import} \PY{n+nn}{pypsa}
-         \PY{k+kn}{import} \PY{n+nn}{pypsa}\PY{n+nn}{.}\PY{n+nn}{geo} \PY{k}{as} \PY{n+nn}{geo}
-         
-         \PY{o}{\PYZpc{}}\PY{k}{matplotlib} inline
+{\color{incolor}In [{\color{incolor} }]:} \PY{k+kn}{from} \PY{n+nn}{\PYZus{}\PYZus{}future\PYZus{}\PYZus{}} \PY{k}{import} \PY{n}{print\PYZus{}function}\PY{p}{,} \PY{n}{division}
+        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np} \PY{c+c1}{\PYZsh{} 1.14.0}
+        \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd} \PY{c+c1}{\PYZsh{} 0.22}
+        \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt} \PY{c+c1}{\PYZsh{} 2.1.2}
+        \PY{k+kn}{from} \PY{n+nn}{datetime} \PY{k}{import} \PY{n}{datetime} 
+        \PY{k+kn}{import} \PY{n+nn}{math}
+        \PY{k+kn}{import} \PY{n+nn}{os}
+        \PY{k+kn}{import} \PY{n+nn}{dill} \PY{k}{as} \PY{n+nn}{pickle} \PY{c+c1}{\PYZsh{} Transfer data for analysis \PYZsh{} dill version 0.2.7.1}
+        
+        \PY{k+kn}{import} \PY{n+nn}{pypsa} \PY{c+c1}{\PYZsh{} 0.13.1}
+        \PY{k+kn}{import} \PY{n+nn}{pypsa}\PY{n+nn}{.}\PY{n+nn}{geo} \PY{k}{as} \PY{n+nn}{geo}
+        
+        \PY{k+kn}{from} \PY{n+nn}{custom\PYZus{}thesis\PYZus{}functions} \PY{k}{import} \PY{o}{*}
+        
+        \PY{o}{\PYZpc{}}\PY{k}{matplotlib} inline
 \end{Verbatim}
 
 
@@ -313,536 +313,196 @@ excel-files and is read using methods from pandas.
     \subsubsection{Variables}\label{variables}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}31}]:} \PY{n}{network} \PY{o}{=} \PY{n}{pypsa}\PY{o}{.}\PY{n}{Network}\PY{p}{(}\PY{p}{)}
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{period} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{date\PYZus{}range}\PY{p}{(}\PY{n}{start}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{2017\PYZhy{}01\PYZhy{}21 00:00}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{end}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{2017\PYZhy{}01\PYZhy{}21 23:45}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{freq}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{h}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}32}]:} \PY{n}{network}\PY{o}{.}\PY{n}{set\PYZus{}snapshots}\PY{p}{(}\PY{p}{[}\PY{n}{p} \PY{k}{for} \PY{n}{p} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{96}\PY{p}{)}\PY{p}{]}\PY{p}{)}
-         \PY{c+c1}{\PYZsh{} tag = 96, woche = 672, monat = 2880}
-         \PY{c+c1}{\PYZsh{} snap\PYZus{}num = len(network.snapshots)}
+{\color{incolor}In [{\color{incolor} }]:} \PY{c+c1}{\PYZsh{} Variable to add further info to filename about e.g. which added\PYZus{}vals were used}
+        \PY{n}{instance\PYZus{}info} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZdq{}}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}33}]:} \PY{n}{cur\PYZus{}path} \PY{o}{=} \PY{l+s+sa}{r}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{C:}\PY{l+s+s2}{\PYZbs{}}\PY{l+s+s2}{Users}\PY{l+s+s2}{\PYZbs{}}\PY{l+s+s2}{janni}\PY{l+s+s2}{\PYZbs{}}\PY{l+s+s2}{OneDrive}\PY{l+s+s2}{\PYZbs{}}\PY{l+s+s2}{TU Berlin}\PY{l+s+s2}{\PYZbs{}}\PY{l+s+s2}{4 \PYZhy{} Abschlussarbeiten}\PY{l+s+s2}{\PYZbs{}}\PY{l+s+s2}{01 \PYZhy{} Bachelorarbeit}\PY{l+s+s2}{\PYZbs{}}\PY{l+s+s2}{modell}\PY{l+s+s2}{\PYZbs{}}\PY{l+s+s2}{data}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{\PYZdq{}}
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{include\PYZus{}fission} \PY{o}{=} \PY{k+kc}{False}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}34}]:} \PY{n}{marginal\PYZus{}costs\PYZus{}carrier} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wind}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{l+m+mi}{5}\PY{p}{\PYZcb{}}
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{marginal\PYZus{}costs\PYZus{}carrier} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wind}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{l+m+mi}{2}\PY{p}{,}
+                                  \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ee}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{l+m+mi}{2}\PY{p}{,}
+                                  \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Kernenergie}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{l+m+mi}{3}\PY{p}{,}
+                                  \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Import}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{l+m+mi}{10000}\PY{p}{\PYZcb{}}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{statedistribution} \PY{o}{=} \PY{p}{[}\PY{l+m+mf}{0.054}\PY{p}{,} \PY{l+m+mf}{0.074}\PY{p}{,} \PY{l+m+mf}{0.126}\PY{p}{,} \PY{l+m+mf}{0.217}\PY{p}{,} \PY{l+m+mf}{0.061}\PY{p}{,} \PY{l+m+mf}{0.075}\PY{p}{,} \PY{l+m+mf}{0.133}\PY{p}{,} \PY{l+m+mf}{0.157}\PY{p}{,} \PY{l+m+mf}{0.103}\PY{p}{]}
+\end{Verbatim}
+
+
+    Variables that are to be considered during unit commitment
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{added\PYZus{}vals} \PY{o}{=} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{p\PYZus{}nom\PYZus{}min}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                      \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{marginal\PYZus{}cost}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                      \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{efficiency}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                      \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{start\PYZus{}up\PYZus{}cost}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                      \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{shut\PYZus{}down\PYZus{}cost}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                      \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{min\PYZus{}up\PYZus{}time}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                      \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{min\PYZus{}down\PYZus{}time}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+        \PY{c+c1}{\PYZsh{}               \PYZdq{}ramp\PYZus{}limit\PYZus{}up\PYZdq{},}
+        \PY{c+c1}{\PYZsh{}               \PYZdq{}ramp\PYZus{}limit\PYZus{}down\PYZdq{}}
+                      \PY{p}{]}
+\end{Verbatim}
+
+
+    This is done here to ease the testing of different parameters
+df_generators_ucData = pd.DataFrame(
+    [[0.5,9,0.37,30*200,30*200,8,20,0.025,0.025],
+     [0.5,9.37,0.4,60*200,60*200,8,16,0.0375,0.0375],
+     [0.4,21.13,0.41,80*200,80*200,8,16,0.1,0.1]],
+    index=["Braunkohle","Steinkohle","Erdgas"],
+    columns=["p_nom_min","marginal_cost","efficiency","start_up_cost","shut_down_cost","min_up_time","min_down_time","ramp_limit_up","ramp_limit_down"]
+)
+df_generators_ucData
+    \section{\_\_\_\_}\label{section}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{network} \PY{o}{=} \PY{n}{pypsa}\PY{o}{.}\PY{n}{Network}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{network}\PY{o}{.}\PY{n}{set\PYZus{}snapshots}\PY{p}{(}\PY{n}{period}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{k}{if} \PY{n}{include\PYZus{}fission}\PY{p}{:}
+            \PY{n}{instance\PYZus{}info} \PY{o}{+}\PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{+fission}\PY{l+s+s2}{\PYZdq{}}
 \end{Verbatim}
 
 
     \subsection{Data Import}\label{data-import}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}35}]:} \PY{n}{mapGermany\PYZus{}file} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{ExcelFile}\PY{p}{(}\PY{n}{cur\PYZus{}path} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{map\PYZus{}cities.xlsx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{mapAbroad\PYZus{}file} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{ExcelFile}\PY{p}{(}\PY{n}{cur\PYZus{}path} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{map\PYZus{}countries.xlsx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         \PY{n}{fleet\PYZus{}file} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{n}{cur\PYZus{}path} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{power\PYZus{}grid\PYZus{}mapping\PYZus{}generator\PYZus{}fleet.xlsx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{sheet\PYZus{}name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{fleet\PYZus{}fuel}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{header}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{usecols}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{B:D}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{uc\PYZus{}file\PYZus{}2017} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{n}{cur\PYZus{}path} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{uc\PYZus{}data.xlsx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{sheet\PYZus{}name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{2017}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{header}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{usecols}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{A:J}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{c+c1}{\PYZsh{} wind\PYZus{}file = pd.read\PYZus{}excel(cur\PYZus{}path + \PYZdq{}Stromlast und Windeinspeisung.xlsx\PYZdq{}, sheet\PYZus{}name=\PYZdq{}Tabelle1\PYZdq{}, index\PYZus{}col=0, header=3, usecols=\PYZdq{}A:F\PYZdq{})}
-         \PY{n}{demand\PYZus{}file} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{n}{cur\PYZus{}path} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{DE Realisierter Stromverbrauch 2017.xlsx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{sheet\PYZus{}name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mapping\PYZus{}demand}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{header}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{usecols}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{A:J}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{wind\PYZus{}dispatch\PYZus{}file} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{n}{cur\PYZus{}path} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{DE Realisierte Erzeugung 2017.xlsx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{sheet\PYZus{}name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mapping\PYZus{}wind}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{header}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{usecols}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{A:C}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{excelFile\PYZus{}mapGermany} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{ExcelFile}\PY{p}{(}\PY{n}{path\PYZus{}import\PYZus{}data} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{map\PYZus{}cities.xlsx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n}{excelFile\PYZus{}mapAbroad} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{ExcelFile}\PY{p}{(}\PY{n}{path\PYZus{}import\PYZus{}data} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{map\PYZus{}countries.xlsx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n}{excelFile\PYZus{}generators\PYZus{}fossil} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{ExcelFile}\PY{p}{(}\PY{n}{path\PYZus{}import\PYZus{}data} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{power\PYZus{}grid\PYZus{}mapping\PYZus{}generator\PYZus{}fleet.xlsx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n}{excelFile\PYZus{}generators\PYZus{}ucData} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{ExcelFile}\PY{p}{(}\PY{n}{path\PYZus{}import\PYZus{}data} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{uc\PYZus{}data.xlsx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n}{excelFile\PYZus{}demand} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{ExcelFile}\PY{p}{(}\PY{n}{path\PYZus{}import\PYZus{}data} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{DE Realisierter Stromverbrauch 2017.xlsx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n}{excelFile\PYZus{}dispatch\PYZus{}ee} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{ExcelFile}\PY{p}{(}\PY{n}{path\PYZus{}import\PYZus{}data}\PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{DE Realisierte Erzeugung 2017.xlsx}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}59}]:} \PY{n}{demand\PYZus{}file}
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{df\PYZus{}generators\PYZus{}fossil} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{n}{excelFile\PYZus{}generators\PYZus{}fossil}\PY{p}{,}
+                                             \PY{n}{sheet\PYZus{}name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{fleet\PYZus{}fuel}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{header}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{usecols}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{B:D}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        
+        \PY{n}{df\PYZus{}generators\PYZus{}ucData} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{n}{excelFile\PYZus{}generators\PYZus{}ucData}\PY{p}{,}
+                                             \PY{n}{sheet\PYZus{}name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{2017}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{header}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{usecols}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{A:J}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{c+c1}{\PYZsh{}wind\PYZus{}file = pd.read\PYZus{}excel(path\PYZus{}import\PYZus{}data + \PYZdq{}Stromlast und Windeinspeisung.xlsx\PYZdq{},}
+        \PY{c+c1}{\PYZsh{}                          sheet\PYZus{}name=\PYZdq{}Tabelle1\PYZdq{}, index\PYZus{}col=0, header=3, usecols=\PYZdq{}A:F\PYZdq{})}
+        
+        \PY{n}{df\PYZus{}demand} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{n}{excelFile\PYZus{}demand}\PY{p}{,}
+                                  \PY{n}{sheet\PYZus{}name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mapping\PYZus{}demand}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{header}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{usecols}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{A:J}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        
+        \PY{n}{df\PYZus{}dispatch\PYZus{}wind} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{n}{excelFile\PYZus{}dispatch\PYZus{}ee}\PY{p}{,}
+                                         \PY{n}{sheet\PYZus{}name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mapping\PYZus{}wind}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{header}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{usecols}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{A:C}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        
+        \PY{n}{df\PYZus{}dispatch\PYZus{}ee} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{n}{excelFile\PYZus{}dispatch\PYZus{}ee}\PY{p}{,}
+                                       \PY{n}{sheet\PYZus{}name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Realisierte Erzeugung}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{header}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{usecols}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{A,B,C,E,F,G,L}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \end{Verbatim}
 
 
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}59}]:}                      Niedersachsen, Bremen, Hamburg, Schleswig-Holstein(node\_id 0)  \textbackslash{}
-         time\_step                                                                            
-         2017-01-01 00:00:00                                               1823               
-         2017-01-01 00:15:00                                               1820               
-         2017-01-01 00:30:00                                               1814               
-         2017-01-01 00:45:00                                               1803               
-         2017-01-01 01:00:00                                               1779               
-         2017-01-01 01:15:00                                               1764               
-         2017-01-01 01:30:00                                               1757               
-         2017-01-01 01:45:00                                               1745               
-         2017-01-01 02:00:00                                               1739               
-         2017-01-01 02:15:00                                               1728               
-         2017-01-01 02:30:00                                               1705               
-         2017-01-01 02:45:00                                               1687               
-         2017-01-01 03:00:00                                               1665               
-         2017-01-01 03:15:00                                               1652               
-         2017-01-01 03:30:00                                               1648               
-         2017-01-01 03:45:00                                               1642               
-         2017-01-01 04:00:00                                               1642               
-         2017-01-01 04:15:00                                               1628               
-         2017-01-01 04:30:00                                               1617               
-         2017-01-01 04:45:00                                               1602               
-         2017-01-01 05:00:00                                               1590               
-         2017-01-01 05:15:00                                               1576               
-         2017-01-01 05:30:00                                               1563               
-         2017-01-01 05:45:00                                               1558               
-         2017-01-01 06:00:00                                               1506               
-         2017-01-01 06:15:00                                               1529               
-         2017-01-01 06:30:00                                               1531               
-         2017-01-01 06:45:00                                               1533               
-         2017-01-01 07:00:00                                               1544               
-         2017-01-01 07:15:00                                               1546               
-         {\ldots}                                                                {\ldots}               
-         2017-12-31 16:30:00                                               2176               
-         2017-12-31 16:45:00                                               2231               
-         2017-12-31 17:00:00                                               2269               
-         2017-12-31 17:15:00                                               2287               
-         2017-12-31 17:30:00                                               2313               
-         2017-12-31 17:45:00                                               2314               
-         2017-12-31 18:00:00                                               2295               
-         2017-12-31 18:15:00                                               2274               
-         2017-12-31 18:30:00                                               2270               
-         2017-12-31 18:45:00                                               2230               
-         2017-12-31 19:00:00                                               2204               
-         2017-12-31 19:15:00                                               2178               
-         2017-12-31 19:30:00                                               2142               
-         2017-12-31 19:45:00                                               2096               
-         2017-12-31 20:00:00                                               2059               
-         2017-12-31 20:15:00                                               2015               
-         2017-12-31 20:30:00                                               1983               
-         2017-12-31 20:45:00                                               1946               
-         2017-12-31 21:00:00                                               1907               
-         2017-12-31 21:15:00                                               1902               
-         2017-12-31 21:30:00                                               1891               
-         2017-12-31 21:45:00                                               1891               
-         2017-12-31 22:00:00                                               1922               
-         2017-12-31 22:15:00                                               1912               
-         2017-12-31 22:30:00                                               1892               
-         2017-12-31 22:45:00                                               1869               
-         2017-12-31 23:00:00                                               1857               
-         2017-12-31 23:15:00                                               1848               
-         2017-12-31 23:30:00                                               1832               
-         2017-12-31 23:45:00                                               1828               
-         
-                              Nordrhein-Westfalen(node\_id 1)  Hessen(node\_id 2)  \textbackslash{}
-         time\_step                                                                
-         2017-01-01 00:00:00                            2417                837   
-         2017-01-01 00:15:00                            2413                835   
-         2017-01-01 00:30:00                            2405                833   
-         2017-01-01 00:45:00                            2390                828   
-         2017-01-01 01:00:00                            2359                817   
-         2017-01-01 01:15:00                            2339                810   
-         2017-01-01 01:30:00                            2329                806   
-         2017-01-01 01:45:00                            2315                801   
-         2017-01-01 02:00:00                            2305                798   
-         2017-01-01 02:15:00                            2291                793   
-         2017-01-01 02:30:00                            2261                783   
-         2017-01-01 02:45:00                            2238                775   
-         2017-01-01 03:00:00                            2208                764   
-         2017-01-01 03:15:00                            2191                759   
-         2017-01-01 03:30:00                            2185                757   
-         2017-01-01 03:45:00                            2178                754   
-         2017-01-01 04:00:00                            2177                754   
-         2017-01-01 04:15:00                            2158                747   
-         2017-01-01 04:30:00                            2144                742   
-         2017-01-01 04:45:00                            2125                736   
-         2017-01-01 05:00:00                            2109                730   
-         2017-01-01 05:15:00                            2090                724   
-         2017-01-01 05:30:00                            2072                717   
-         2017-01-01 05:45:00                            2066                715   
-         2017-01-01 06:00:00                            1996                691   
-         2017-01-01 06:15:00                            2028                702   
-         2017-01-01 06:30:00                            2030                703   
-         2017-01-01 06:45:00                            2032                704   
-         2017-01-01 07:00:00                            2048                709   
-         2017-01-01 07:15:00                            2051                710   
-         {\ldots}                                             {\ldots}                {\ldots}   
-         2017-12-31 16:30:00                            2886                999   
-         2017-12-31 16:45:00                            2958               1024   
-         2017-12-31 17:00:00                            3008               1042   
-         2017-12-31 17:15:00                            3033               1050   
-         2017-12-31 17:30:00                            3067               1062   
-         2017-12-31 17:45:00                            3069               1063   
-         2017-12-31 18:00:00                            3043               1054   
-         2017-12-31 18:15:00                            3015               1044   
-         2017-12-31 18:30:00                            3010               1042   
-         2017-12-31 18:45:00                            2956               1024   
-         2017-12-31 19:00:00                            2922               1012   
-         2017-12-31 19:15:00                            2888               1000   
-         2017-12-31 19:30:00                            2840                983   
-         2017-12-31 19:45:00                            2780                962   
-         2017-12-31 20:00:00                            2731                946   
-         2017-12-31 20:15:00                            2671                925   
-         2017-12-31 20:30:00                            2629                910   
-         2017-12-31 20:45:00                            2580                893   
-         2017-12-31 21:00:00                            2529                876   
-         2017-12-31 21:15:00                            2523                873   
-         2017-12-31 21:30:00                            2507                868   
-         2017-12-31 21:45:00                            2507                868   
-         2017-12-31 22:00:00                            2548                882   
-         2017-12-31 22:15:00                            2535                878   
-         2017-12-31 22:30:00                            2508                869   
-         2017-12-31 22:45:00                            2478                858   
-         2017-12-31 23:00:00                            2462                852   
-         2017-12-31 23:15:00                            2450                848   
-         2017-12-31 23:30:00                            2429                841   
-         2017-12-31 23:45:00                            2424                839   
-         
-                              Rheinland-Pfalz, Saarland(node\_id 3)  \textbackslash{}
-         time\_step                                                   
-         2017-01-01 00:00:00                                   683   
-         2017-01-01 00:15:00                                   682   
-         2017-01-01 00:30:00                                   680   
-         2017-01-01 00:45:00                                   676   
-         2017-01-01 01:00:00                                   667   
-         2017-01-01 01:15:00                                   661   
-         2017-01-01 01:30:00                                   658   
-         2017-01-01 01:45:00                                   654   
-         2017-01-01 02:00:00                                   652   
-         2017-01-01 02:15:00                                   648   
-         2017-01-01 02:30:00                                   639   
-         2017-01-01 02:45:00                                   633   
-         2017-01-01 03:00:00                                   624   
-         2017-01-01 03:15:00                                   619   
-         2017-01-01 03:30:00                                   618   
-         2017-01-01 03:45:00                                   616   
-         2017-01-01 04:00:00                                   616   
-         2017-01-01 04:15:00                                   610   
-         2017-01-01 04:30:00                                   606   
-         2017-01-01 04:45:00                                   601   
-         2017-01-01 05:00:00                                   596   
-         2017-01-01 05:15:00                                   591   
-         2017-01-01 05:30:00                                   586   
-         2017-01-01 05:45:00                                   584   
-         2017-01-01 06:00:00                                   564   
-         2017-01-01 06:15:00                                   573   
-         2017-01-01 06:30:00                                   574   
-         2017-01-01 06:45:00                                   575   
-         2017-01-01 07:00:00                                   579   
-         2017-01-01 07:15:00                                   580   
-         {\ldots}                                                   {\ldots}   
-         2017-12-31 16:30:00                                   816   
-         2017-12-31 16:45:00                                   836   
-         2017-12-31 17:00:00                                   850   
-         2017-12-31 17:15:00                                   858   
-         2017-12-31 17:30:00                                   867   
-         2017-12-31 17:45:00                                   868   
-         2017-12-31 18:00:00                                   860   
-         2017-12-31 18:15:00                                   852   
-         2017-12-31 18:30:00                                   851   
-         2017-12-31 18:45:00                                   836   
-         2017-12-31 19:00:00                                   826   
-         2017-12-31 19:15:00                                   816   
-         2017-12-31 19:30:00                                   803   
-         2017-12-31 19:45:00                                   786   
-         2017-12-31 20:00:00                                   772   
-         2017-12-31 20:15:00                                   755   
-         2017-12-31 20:30:00                                   743   
-         2017-12-31 20:45:00                                   729   
-         2017-12-31 21:00:00                                   715   
-         2017-12-31 21:15:00                                   713   
-         2017-12-31 21:30:00                                   709   
-         2017-12-31 21:45:00                                   709   
-         2017-12-31 22:00:00                                   720   
-         2017-12-31 22:15:00                                   717   
-         2017-12-31 22:30:00                                   709   
-         2017-12-31 22:45:00                                   701   
-         2017-12-31 23:00:00                                   696   
-         2017-12-31 23:15:00                                   693   
-         2017-12-31 23:30:00                                   687   
-         2017-12-31 23:45:00                                   685   
-         
-                              Baden-Württemberg(node\_id 4)  Bayern(node\_id 5)  \textbackslash{}
-         time\_step                                                              
-         2017-01-01 00:00:00                          1485               1755   
-         2017-01-01 00:15:00                          1483               1752   
-         2017-01-01 00:30:00                          1478               1746   
-         2017-01-01 00:45:00                          1469               1736   
-         2017-01-01 01:00:00                          1449               1713   
-         2017-01-01 01:15:00                          1437               1699   
-         2017-01-01 01:30:00                          1431               1691   
-         2017-01-01 01:45:00                          1422               1681   
-         2017-01-01 02:00:00                          1417               1674   
-         2017-01-01 02:15:00                          1408               1664   
-         2017-01-01 02:30:00                          1390               1642   
-         2017-01-01 02:45:00                          1375               1625   
-         2017-01-01 03:00:00                          1357               1603   
-         2017-01-01 03:15:00                          1346               1591   
-         2017-01-01 03:30:00                          1343               1587   
-         2017-01-01 03:45:00                          1338               1581   
-         2017-01-01 04:00:00                          1338               1581   
-         2017-01-01 04:15:00                          1326               1567   
-         2017-01-01 04:30:00                          1317               1557   
-         2017-01-01 04:45:00                          1306               1543   
-         2017-01-01 05:00:00                          1296               1531   
-         2017-01-01 05:15:00                          1284               1518   
-         2017-01-01 05:30:00                          1273               1505   
-         2017-01-01 05:45:00                          1269               1500   
-         2017-01-01 06:00:00                          1227               1450   
-         2017-01-01 06:15:00                          1246               1473   
-         2017-01-01 06:30:00                          1247               1474   
-         2017-01-01 06:45:00                          1249               1476   
-         2017-01-01 07:00:00                          1258               1487   
-         2017-01-01 07:15:00                          1260               1489   
-         {\ldots}                                           {\ldots}                {\ldots}   
-         2017-12-31 16:30:00                          1773               2096   
-         2017-12-31 16:45:00                          1818               2148   
-         2017-12-31 17:00:00                          1848               2185   
-         2017-12-31 17:15:00                          1864               2203   
-         2017-12-31 17:30:00                          1885               2228   
-         2017-12-31 17:45:00                          1886               2229   
-         2017-12-31 18:00:00                          1870               2210   
-         2017-12-31 18:15:00                          1852               2189   
-         2017-12-31 18:30:00                          1849               2186   
-         2017-12-31 18:45:00                          1817               2147   
-         2017-12-31 19:00:00                          1795               2122   
-         2017-12-31 19:15:00                          1774               2097   
-         2017-12-31 19:30:00                          1745               2062   
-         2017-12-31 19:45:00                          1708               2019   
-         2017-12-31 20:00:00                          1678               1983   
-         2017-12-31 20:15:00                          1641               1940   
-         2017-12-31 20:30:00                          1616               1909   
-         2017-12-31 20:45:00                          1585               1874   
-         2017-12-31 21:00:00                          1554               1836   
-         2017-12-31 21:15:00                          1550               1832   
-         2017-12-31 21:30:00                          1541               1821   
-         2017-12-31 21:45:00                          1541               1821   
-         2017-12-31 22:00:00                          1566               1851   
-         2017-12-31 22:15:00                          1557               1841   
-         2017-12-31 22:30:00                          1541               1822   
-         2017-12-31 22:45:00                          1523               1799   
-         2017-12-31 23:00:00                          1513               1788   
-         2017-12-31 23:15:00                          1505               1779   
-         2017-12-31 23:30:00                          1493               1764   
-         2017-12-31 23:45:00                          1489               1760   
-         
-                              Berlin, Brandenburg(node\_id 6)  \textbackslash{}
-         time\_step                                             
-         2017-01-01 00:00:00                             810   
-         2017-01-01 00:15:00                             809   
-         2017-01-01 00:30:00                             806   
-         2017-01-01 00:45:00                             801   
-         2017-01-01 01:00:00                             790   
-         2017-01-01 01:15:00                             784   
-         2017-01-01 01:30:00                             780   
-         2017-01-01 01:45:00                             775   
-         2017-01-01 02:00:00                             772   
-         2017-01-01 02:15:00                             768   
-         2017-01-01 02:30:00                             758   
-         2017-01-01 02:45:00                             750   
-         2017-01-01 03:00:00                             740   
-         2017-01-01 03:15:00                             734   
-         2017-01-01 03:30:00                             732   
-         2017-01-01 03:45:00                             730   
-         2017-01-01 04:00:00                             730   
-         2017-01-01 04:15:00                             723   
-         2017-01-01 04:30:00                             718   
-         2017-01-01 04:45:00                             712   
-         2017-01-01 05:00:00                             706   
-         2017-01-01 05:15:00                             700   
-         2017-01-01 05:30:00                             694   
-         2017-01-01 05:45:00                             692   
-         2017-01-01 06:00:00                             669   
-         2017-01-01 06:15:00                             679   
-         2017-01-01 06:30:00                             680   
-         2017-01-01 06:45:00                             681   
-         2017-01-01 07:00:00                             686   
-         2017-01-01 07:15:00                             687   
-         {\ldots}                                             {\ldots}   
-         2017-12-31 16:30:00                             967   
-         2017-12-31 16:45:00                             991   
-         2017-12-31 17:00:00                            1008   
-         2017-12-31 17:15:00                            1016   
-         2017-12-31 17:30:00                            1028   
-         2017-12-31 17:45:00                            1028   
-         2017-12-31 18:00:00                            1020   
-         2017-12-31 18:15:00                            1010   
-         2017-12-31 18:30:00                            1008   
-         2017-12-31 18:45:00                             991   
-         2017-12-31 19:00:00                             979   
-         2017-12-31 19:15:00                             968   
-         2017-12-31 19:30:00                             952   
-         2017-12-31 19:45:00                             931   
-         2017-12-31 20:00:00                             915   
-         2017-12-31 20:15:00                             895   
-         2017-12-31 20:30:00                             881   
-         2017-12-31 20:45:00                             865   
-         2017-12-31 21:00:00                             847   
-         2017-12-31 21:15:00                             845   
-         2017-12-31 21:30:00                             840   
-         2017-12-31 21:45:00                             840   
-         2017-12-31 22:00:00                             854   
-         2017-12-31 22:15:00                             849   
-         2017-12-31 22:30:00                             840   
-         2017-12-31 22:45:00                             830   
-         2017-12-31 23:00:00                             825   
-         2017-12-31 23:15:00                             821   
-         2017-12-31 23:30:00                             814   
-         2017-12-31 23:45:00                             812   
-         
-                              Mecklenburg-Vorpommern(node\_id 7)  \textbackslash{}
-         time\_step                                                
-         2017-01-01 00:00:00                                216   
-         2017-01-01 00:15:00                                215   
-         2017-01-01 00:30:00                                214   
-         2017-01-01 00:45:00                                213   
-         2017-01-01 01:00:00                                210   
-         2017-01-01 01:15:00                                209   
-         2017-01-01 01:30:00                                208   
-         2017-01-01 01:45:00                                206   
-         2017-01-01 02:00:00                                206   
-         2017-01-01 02:15:00                                204   
-         2017-01-01 02:30:00                                202   
-         2017-01-01 02:45:00                                200   
-         2017-01-01 03:00:00                                197   
-         2017-01-01 03:15:00                                195   
-         2017-01-01 03:30:00                                195   
-         2017-01-01 03:45:00                                194   
-         2017-01-01 04:00:00                                194   
-         2017-01-01 04:15:00                                192   
-         2017-01-01 04:30:00                                191   
-         2017-01-01 04:45:00                                189   
-         2017-01-01 05:00:00                                188   
-         2017-01-01 05:15:00                                186   
-         2017-01-01 05:30:00                                185   
-         2017-01-01 05:45:00                                184   
-         2017-01-01 06:00:00                                178   
-         2017-01-01 06:15:00                                181   
-         2017-01-01 06:30:00                                181   
-         2017-01-01 06:45:00                                181   
-         2017-01-01 07:00:00                                183   
-         2017-01-01 07:15:00                                183   
-         {\ldots}                                                {\ldots}   
-         2017-12-31 16:30:00                                257   
-         2017-12-31 16:45:00                                264   
-         2017-12-31 17:00:00                                268   
-         2017-12-31 17:15:00                                271   
-         2017-12-31 17:30:00                                274   
-         2017-12-31 17:45:00                                274   
-         2017-12-31 18:00:00                                272   
-         2017-12-31 18:15:00                                269   
-         2017-12-31 18:30:00                                269   
-         2017-12-31 18:45:00                                264   
-         2017-12-31 19:00:00                                261   
-         2017-12-31 19:15:00                                258   
-         2017-12-31 19:30:00                                253   
-         2017-12-31 19:45:00                                248   
-         2017-12-31 20:00:00                                244   
-         2017-12-31 20:15:00                                238   
-         2017-12-31 20:30:00                                235   
-         2017-12-31 20:45:00                                230   
-         2017-12-31 21:00:00                                226   
-         2017-12-31 21:15:00                                225   
-         2017-12-31 21:30:00                                224   
-         2017-12-31 21:45:00                                224   
-         2017-12-31 22:00:00                                227   
-         2017-12-31 22:15:00                                226   
-         2017-12-31 22:30:00                                224   
-         2017-12-31 22:45:00                                221   
-         2017-12-31 23:00:00                                220   
-         2017-12-31 23:15:00                                219   
-         2017-12-31 23:30:00                                217   
-         2017-12-31 23:45:00                                216   
-         
-                              Sachsen, Sachsen-Anhalt, Thüringen(node\_id 8)  
-         time\_step                                                           
-         2017-01-01 00:00:00                                           1148  
-         2017-01-01 00:15:00                                           1146  
-         2017-01-01 00:30:00                                           1142  
-         2017-01-01 00:45:00                                           1135  
-         2017-01-01 01:00:00                                           1120  
-         2017-01-01 01:15:00                                           1111  
-         2017-01-01 01:30:00                                           1106  
-         2017-01-01 01:45:00                                           1099  
-         2017-01-01 02:00:00                                           1094  
-         2017-01-01 02:15:00                                           1088  
-         2017-01-01 02:30:00                                           1074  
-         2017-01-01 02:45:00                                           1062  
-         2017-01-01 03:00:00                                           1048  
-         2017-01-01 03:15:00                                           1040  
-         2017-01-01 03:30:00                                           1038  
-         2017-01-01 03:45:00                                           1034  
-         2017-01-01 04:00:00                                           1034  
-         2017-01-01 04:15:00                                           1025  
-         2017-01-01 04:30:00                                           1018  
-         2017-01-01 04:45:00                                           1009  
-         2017-01-01 05:00:00                                           1001  
-         2017-01-01 05:15:00                                            992  
-         2017-01-01 05:30:00                                            984  
-         2017-01-01 05:45:00                                            981  
-         2017-01-01 06:00:00                                            948  
-         2017-01-01 06:15:00                                            963  
-         2017-01-01 06:30:00                                            964  
-         2017-01-01 06:45:00                                            965  
-         2017-01-01 07:00:00                                            972  
-         2017-01-01 07:15:00                                            973  
-         {\ldots}                                                            {\ldots}  
-         2017-12-31 16:30:00                                           1370  
-         2017-12-31 16:45:00                                           1404  
-         2017-12-31 17:00:00                                           1428  
-         2017-12-31 17:15:00                                           1440  
-         2017-12-31 17:30:00                                           1456  
-         2017-12-31 17:45:00                                           1457  
-         2017-12-31 18:00:00                                           1445  
-         2017-12-31 18:15:00                                           1431  
-         2017-12-31 18:30:00                                           1429  
-         2017-12-31 18:45:00                                           1404  
-         2017-12-31 19:00:00                                           1387  
-         2017-12-31 19:15:00                                           1371  
-         2017-12-31 19:30:00                                           1348  
-         2017-12-31 19:45:00                                           1320  
-         2017-12-31 20:00:00                                           1296  
-         2017-12-31 20:15:00                                           1268  
-         2017-12-31 20:30:00                                           1248  
-         2017-12-31 20:45:00                                           1225  
-         2017-12-31 21:00:00                                           1201  
-         2017-12-31 21:15:00                                           1198  
-         2017-12-31 21:30:00                                           1190  
-         2017-12-31 21:45:00                                           1190  
-         2017-12-31 22:00:00                                           1210  
-         2017-12-31 22:15:00                                           1203  
-         2017-12-31 22:30:00                                           1191  
-         2017-12-31 22:45:00                                           1176  
-         2017-12-31 23:00:00                                           1169  
-         2017-12-31 23:15:00                                           1163  
-         2017-12-31 23:30:00                                           1153  
-         2017-12-31 23:45:00                                           1151  
-         
-         [35040 rows x 9 columns]
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{k}{if} \PY{n}{include\PYZus{}fission}\PY{p}{:}
+            \PY{n}{df\PYZus{}dispatch\PYZus{}fission} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{n}{excelFile\PYZus{}dispatch\PYZus{}ee}\PY{p}{,}
+                                                \PY{n}{sheet\PYZus{}name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Realisierte Erzeugung}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{index\PYZus{}col}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{header}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{usecols}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{A,H}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        
+            \PY{n}{s\PYZus{}dispatch\PYZus{}fission} \PY{o}{=} \PY{p}{(}\PY{n}{df\PYZus{}dispatch\PYZus{}fission}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}
+                                  \PY{o}{.}\PY{n}{resample}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1H}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+                                  \PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{period}\PY{p}{]}
+                                  \PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
 \end{Verbatim}
-            
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{df\PYZus{}demand} \PY{o}{=} \PY{p}{(}\PY{n}{df\PYZus{}demand}\PY{o}{.}\PY{n}{resample}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{H}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+                     \PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{network}\PY{o}{.}\PY{n}{snapshots}\PY{p}{]}\PY{p}{)}
+        \PY{n}{df\PYZus{}dispatch\PYZus{}wind} \PY{o}{=} \PY{p}{(}\PY{n}{df\PYZus{}dispatch\PYZus{}wind}\PY{o}{.}\PY{n}{resample}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{H}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+                            \PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{network}\PY{o}{.}\PY{n}{snapshots}\PY{p}{]}\PY{p}{)}
+        \PY{n}{s\PYZus{}dispatch\PYZus{}ee} \PY{o}{=} \PY{p}{(}\PY{n}{df\PYZus{}dispatch\PYZus{}ee}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}
+                         \PY{o}{.}\PY{n}{resample}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1H}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+                         \PY{o}{.}\PY{n}{agg}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sum}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{columns}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+                         \PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{period}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
     \subsubsection{Setup within Germany}\label{setup-within-germany}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}36}]:} \PY{n}{df\PYZus{}buses} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{n}{mapGermany\PYZus{}file}\PY{p}{,} \PY{n}{sheet\PYZus{}name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{buses}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{header}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{usecols}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{B:D}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{df\PYZus{}lines} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{n}{mapGermany\PYZus{}file}\PY{p}{,} \PY{n}{sheet\PYZus{}name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{lines}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{header}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{usecols}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{B:D}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{df\PYZus{}buses} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{n}{excelFile\PYZus{}mapGermany}\PY{p}{,}
+                                 \PY{n}{sheet\PYZus{}name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{buses}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{header}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{usecols}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{B:D}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n}{df\PYZus{}lines} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{n}{excelFile\PYZus{}mapGermany}\PY{p}{,}
+                                 \PY{n}{sheet\PYZus{}name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{lines}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{header}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{usecols}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{B:D}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \end{Verbatim}
 
 
     \subsubsection{Setup abroad}\label{setup-abroad}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}37}]:} \PY{n}{df\PYZus{}countries} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{n}{mapAbroad\PYZus{}file}\PY{p}{,} \PY{n}{sheet\PYZus{}name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{buses}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{header}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{usecols}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{B:D}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{df\PYZus{}countries\PYZus{}lines} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{n}{mapAbroad\PYZus{}file}\PY{p}{,} \PY{n}{sheet\PYZus{}name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{lines}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{header}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{usecols}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{B:D}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{df\PYZus{}buses} \PY{o}{=} \PY{n}{df\PYZus{}buses}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{df\PYZus{}countries}\PY{p}{)}\PY{o}{.}\PY{n}{reset\PYZus{}index}\PY{p}{(}\PY{n}{drop}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
-         \PY{n}{df\PYZus{}lines} \PY{o}{=} \PY{n}{df\PYZus{}lines}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{df\PYZus{}countries\PYZus{}lines}\PY{p}{)}\PY{o}{.}\PY{n}{reset\PYZus{}index}\PY{p}{(}\PY{n}{drop}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{df\PYZus{}countries} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{n}{excelFile\PYZus{}mapAbroad}\PY{p}{,}
+                                     \PY{n}{sheet\PYZus{}name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{buses}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{header}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{usecols}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{B:D}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n}{df\PYZus{}countries\PYZus{}lines} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{n}{excelFile\PYZus{}mapAbroad}\PY{p}{,}
+                                           \PY{n}{sheet\PYZus{}name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{lines}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{header}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{usecols}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{B:D}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        
+        \PY{n}{df\PYZus{}buses} \PY{o}{=} \PY{n}{df\PYZus{}buses}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{df\PYZus{}countries}\PY{p}{)}\PY{o}{.}\PY{n}{reset\PYZus{}index}\PY{p}{(}\PY{n}{drop}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+        \PY{n}{df\PYZus{}lines} \PY{o}{=} \PY{n}{df\PYZus{}lines}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{df\PYZus{}countries\PYZus{}lines}\PY{p}{)}\PY{o}{.}\PY{n}{reset\PYZus{}index}\PY{p}{(}\PY{n}{drop}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+
+df_dispatch_ee['sum']=df_dispatch_ee.sum(axis=1)
+    Calculating the length of each line by using the haversine formula
+(needed to represent the earth's eliptical shape)
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{df\PYZus{}lines}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{length}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{0}
+        \PY{n}{df\PYZus{}lines}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{=}\PY{l+m+mf}{0.0001}
+        \PY{n}{df\PYZus{}lines}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{s\PYZus{}nom}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{=} \PY{l+m+mi}{1000000}
+        \PY{c+c1}{\PYZsh{} factor\PYZus{}coords\PYZus{}to\PYZus{}km = 111}
+        
+        \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{df\PYZus{}lines}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+            \PY{n}{start} \PY{o}{=} \PY{p}{[}\PY{n}{df\PYZus{}buses}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{df\PYZus{}lines}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bus0}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{]}\PY{p}{,}\PY{n}{df\PYZus{}buses}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{y}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{df\PYZus{}lines}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bus0}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{]}\PY{p}{]}
+            \PY{n}{ende} \PY{o}{=} \PY{p}{[}\PY{n}{df\PYZus{}buses}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{df\PYZus{}lines}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bus1}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{]}\PY{p}{,} \PY{n}{df\PYZus{}buses}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{y}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{df\PYZus{}lines}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bus1}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{]}\PY{p}{]}
+            \PY{c+c1}{\PYZsh{} Using the haversine forumula to get distance in km}
+            \PY{n}{df\PYZus{}lines}\PY{o}{.}\PY{n}{at}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{length}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{geo}\PY{o}{.}\PY{n}{haversine}\PY{p}{(}\PY{n}{start}\PY{p}{,} \PY{n}{ende}\PY{p}{)}
 \end{Verbatim}
 
 
-    Calculating the length of each line by Pythagoras. The factor enables
-converting the distance in lattitude/longitude to kilometers
-
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}38}]:} \PY{n}{df\PYZus{}lines}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{length}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{0}
-         \PY{n}{df\PYZus{}lines}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{=}\PY{l+m+mf}{0.0001}
-         \PY{n}{df\PYZus{}lines}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{s\PYZus{}nom}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{=} \PY{l+m+mi}{1000}
-         \PY{c+c1}{\PYZsh{} factor\PYZus{}coords\PYZus{}to\PYZus{}km = 111}
-         
-         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{df\PYZus{}lines}\PY{p}{)}\PY{p}{)}\PY{p}{:}
-             \PY{n}{start} \PY{o}{=} \PY{p}{[}\PY{n}{df\PYZus{}buses}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{df\PYZus{}lines}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bus0}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{]}\PY{p}{,} \PY{n}{df\PYZus{}buses}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{y}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{df\PYZus{}lines}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bus0}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{]}\PY{p}{]}
-             \PY{n}{ende} \PY{o}{=} \PY{p}{[}\PY{n}{df\PYZus{}buses}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{df\PYZus{}lines}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bus1}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{]}\PY{p}{,} \PY{n}{df\PYZus{}buses}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{y}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{df\PYZus{}lines}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bus1}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{]}\PY{p}{]}
-             \PY{c+c1}{\PYZsh{} Using the haversine forumula to get distance in km}
-             \PY{n}{df\PYZus{}lines}\PY{o}{.}\PY{n}{at}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{length}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{geo}\PY{o}{.}\PY{n}{haversine}\PY{p}{(}\PY{n}{start}\PY{p}{,} \PY{n}{ende}\PY{p}{)}
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{pypsa}\PY{o}{.}\PY{n}{io}\PY{o}{.}\PY{n}{import\PYZus{}components\PYZus{}from\PYZus{}dataframe}\PY{p}{(}\PY{n}{network}\PY{p}{,} \PY{n}{df\PYZus{}buses}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Bus}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n}{pypsa}\PY{o}{.}\PY{n}{io}\PY{o}{.}\PY{n}{import\PYZus{}components\PYZus{}from\PYZus{}dataframe}\PY{p}{(}\PY{n}{network}\PY{p}{,} \PY{n}{df\PYZus{}lines}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Line}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \end{Verbatim}
 
 
+    Each node abroad gets a capacity of 10 GW to avoid shortages which would
+result in a crash of the model. Given their high price, they probably
+won't be used and only become interesting when it comes to future
+scenarios
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}39}]:} \PY{n}{pypsa}\PY{o}{.}\PY{n}{io}\PY{o}{.}\PY{n}{import\PYZus{}components\PYZus{}from\PYZus{}dataframe}\PY{p}{(}\PY{n}{network}\PY{p}{,} \PY{n}{df\PYZus{}buses}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Bus}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{pypsa}\PY{o}{.}\PY{n}{io}\PY{o}{.}\PY{n}{import\PYZus{}components\PYZus{}from\PYZus{}dataframe}\PY{p}{(}\PY{n}{network}\PY{p}{,} \PY{n}{df\PYZus{}lines}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Line}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+{\color{incolor}In [{\color{incolor} }]:} \PY{c+c1}{\PYZsh{}print(df\PYZus{}countries)}
+        
+        \PY{n}{i} \PY{o}{=} \PY{l+m+mi}{9}
+        \PY{k}{for} \PY{n}{country} \PY{o+ow}{in} \PY{n}{df\PYZus{}buses}\PY{p}{[}\PY{l+m+mi}{9}\PY{p}{:}\PY{l+m+mi}{17}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{:}
+            \PY{n}{network}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Generator}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Import }\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{n}{country}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{,}
+                        \PY{n}{bus}\PY{o}{=}\PY{n}{i}\PY{p}{,}
+                        \PY{n}{carrier}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Import}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                        \PY{n}{p\PYZus{}nom}\PY{o}{=}\PY{l+m+mi}{10000000000}\PY{p}{,}
+                        \PY{n}{marginal\PYZus{}cost}\PY{o}{=}\PY{n}{marginal\PYZus{}costs\PYZus{}carrier}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Import}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}
+                        \PY{n}{committable}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+            \PY{n}{i} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
 \end{Verbatim}
 
 
@@ -851,57 +511,44 @@ converting the distance in lattitude/longitude to kilometers
     \subsubsection{Generators}\label{generators}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}40}]:} \PY{n}{fleet\PYZus{}file}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{fuel}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{carrier}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
-                                    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{capacity[MW]}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{p\PYZus{}nom}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
-         \PY{n}{fleet\PYZus{}file}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{committable}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{k+kc}{True}
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{df\PYZus{}generators\PYZus{}fossil}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{fuel}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{carrier}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                                   \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{capacity[MW]}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{p\PYZus{}nom}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+        \PY{n}{df\PYZus{}generators\PYZus{}fossil}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{committable}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{k+kc}{True}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}41}]:} \PY{n}{added\PYZus{}vals} \PY{o}{=} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{p\PYZus{}nom\PYZus{}min}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
-                       \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{marginal\PYZus{}cost}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
-                       \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{efficiency}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
-                       \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{start\PYZus{}up\PYZus{}cost}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
-                       \PY{c+c1}{\PYZsh{} \PYZdq{}shut\PYZus{}down\PYZus{}cost\PYZdq{},}
-                       \PY{c+c1}{\PYZsh{} \PYZdq{}min\PYZus{}up\PYZus{}time\PYZdq{},}
-                       \PY{c+c1}{\PYZsh{} \PYZdq{}min\PYZus{}down\PYZus{}time\PYZdq{},}
-                       \PY{c+c1}{\PYZsh{} \PYZdq{}ramp\PYZus{}limit\PYZus{}up\PYZdq{},}
-                       \PY{c+c1}{\PYZsh{} \PYZdq{}ramp\PYZus{}limit\PYZus{}down\PYZdq{}}
-                       \PY{p}{]}
-         
-         \PY{n}{fleet\PYZus{}file}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bus}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{0}
-         
-         \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{fleet\PYZus{}file}\PY{p}{)}\PY{p}{)}\PY{p}{:}
-             \PY{c+c1}{\PYZsh{} find index of \PYZdq{}Bundesland\PYZdq{} of each generator}
-             \PY{n}{indices} \PY{o}{=} \PY{p}{[}\PY{n}{i} \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{s} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{network}\PY{o}{.}\PY{n}{buses}\PY{o}{.}\PY{n}{name}\PY{p}{)} \PY{k}{if} \PY{n}{fleet\PYZus{}file}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{state}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o+ow}{in} \PY{n}{s}\PY{p}{]}
-             \PY{n}{fleet\PYZus{}file}\PY{o}{.}\PY{n}{at}\PY{p}{[}\PY{n}{j}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bus}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{indices}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-             \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{added\PYZus{}vals}\PY{p}{)}\PY{p}{)}\PY{p}{:}
-                 \PY{c+c1}{\PYZsh{} insert corresponding values according to the unit commitment file to dataframe for import}
-                 \PY{n}{fleet\PYZus{}file}\PY{o}{.}\PY{n}{at}\PY{p}{[}\PY{n}{j}\PY{p}{,} \PY{n}{added\PYZus{}vals}\PY{p}{[}\PY{n}{k}\PY{p}{]}\PY{p}{]} \PY{o}{=} \PY{n}{uc\PYZus{}file\PYZus{}2017}\PY{p}{[}\PY{n}{added\PYZus{}vals}\PY{p}{[}\PY{n}{k}\PY{p}{]}\PY{p}{]}\PY{p}{[}\PY{n}{fleet\PYZus{}file}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{carrier}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{p}{]}
-\end{Verbatim}
-
-fleet_file
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}42}]:} \PY{n}{pypsa}\PY{o}{.}\PY{n}{io}\PY{o}{.}\PY{n}{import\PYZus{}components\PYZus{}from\PYZus{}dataframe}\PY{p}{(}\PY{n}{network}\PY{p}{,} \PY{n}{fleet\PYZus{}file}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Generator}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{df\PYZus{}generators\PYZus{}fossil}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bus}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{0}
+        
+        \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{df\PYZus{}generators\PYZus{}fossil}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+            \PY{c+c1}{\PYZsh{} find index of \PYZdq{}Bundesland\PYZdq{} of each generator}
+            \PY{n}{indices} \PY{o}{=} \PY{p}{[}\PY{n}{i} \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{s} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{network}\PY{o}{.}\PY{n}{buses}\PY{o}{.}\PY{n}{name}\PY{p}{)} \PY{k}{if} \PY{n}{df\PYZus{}generators\PYZus{}fossil}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{state}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{j}\PY{p}{]} \PY{o+ow}{in} \PY{n}{s}\PY{p}{]}
+            \PY{n}{df\PYZus{}generators\PYZus{}fossil}\PY{o}{.}\PY{n}{at}\PY{p}{[}\PY{n}{j}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bus}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{indices}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+            \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{added\PYZus{}vals}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+                \PY{c+c1}{\PYZsh{} insert corresponding values according to the unit commitment file to dataframe for import}
+                \PY{n}{df\PYZus{}generators\PYZus{}fossil}\PY{o}{.}\PY{n}{at}\PY{p}{[}\PY{n}{j}\PY{p}{,} \PY{n}{added\PYZus{}vals}\PY{p}{[}\PY{n}{k}\PY{p}{]}\PY{p}{]} \PY{o}{=} \PY{n}{df\PYZus{}generators\PYZus{}ucData}\PY{p}{[}\PY{n}{added\PYZus{}vals}\PY{p}{[}\PY{n}{k}\PY{p}{]}\PY{p}{]}\PY{p}{[}\PY{n}{df\PYZus{}generators\PYZus{}fossil}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{carrier}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{p}{]}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}43}]:} \PY{c+c1}{\PYZsh{} Name of each Generator is a combination of state and carrier name (e.g. \PYZdq{}Berlin Erdgas\PYZdq{})}
-         \PY{n}{gen\PYZus{}names} \PY{o}{=} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}0\PYZcb{}}\PY{l+s+s2}{ }\PY{l+s+si}{\PYZob{}1\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{s}\PY{p}{,} \PY{n}{c}\PY{p}{)} \PY{k}{for} \PY{n}{s}\PY{p}{,} \PY{n}{c} \PY{o+ow}{in} \PY{n+nb}{zip}\PY{p}{(}\PY{n}{fleet\PYZus{}file}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{state}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{fleet\PYZus{}file}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{carrier}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}\PY{p}{]}
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{pypsa}\PY{o}{.}\PY{n}{io}\PY{o}{.}\PY{n}{import\PYZus{}components\PYZus{}from\PYZus{}dataframe}\PY{p}{(}\PY{n}{network}\PY{p}{,} \PY{n}{df\PYZus{}generators\PYZus{}fossil}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Generator}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{c+c1}{\PYZsh{} Name of each Generator is a combination of state and carrier name (e.g. \PYZdq{}Berlin Erdgas\PYZdq{})}
+        \PY{n}{gen\PYZus{}names} \PY{o}{=} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}0\PYZcb{}}\PY{l+s+s2}{ }\PY{l+s+si}{\PYZob{}1\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{s}\PY{p}{,} \PY{n}{c}\PY{p}{)} \PY{k}{for} \PY{n}{s}\PY{p}{,} \PY{n}{c} \PY{o+ow}{in} \PY{n+nb}{zip}\PY{p}{(}\PY{n}{df\PYZus{}generators\PYZus{}fossil}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{state}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{df\PYZus{}generators\PYZus{}fossil}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{carrier}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}\PY{p}{]}
 \end{Verbatim}
 
 
     \subsubsection{Wind Energy}\label{wind-energy}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}44}]:} \PY{n}{p\PYZus{}wind\PYZus{}generators} \PY{o}{=} \PY{p}{[}\PY{p}{[}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{p}{]}\PY{p}{]}
-         
-         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{:}
-             \PY{c+c1}{\PYZsh{} grab each column from wind df}
-             \PY{n}{tmp} \PY{o}{=} \PY{n}{wind\PYZus{}dispatch\PYZus{}file}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{i}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}
-             \PY{c+c1}{\PYZsh{} take datapoints corresponding to timestamps in network.snapshots}
-             \PY{n}{p\PYZus{}wind\PYZus{}generators}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{p}{[}\PY{n}{tmp}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{network}\PY{o}{.}\PY{n}{snapshots}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{]}
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{df\PYZus{}info\PYZus{}wind} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{\PYZob{}}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Nordsee}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Ostsee}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bus}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{p}{[}\PY{l+m+mi}{17}\PY{p}{,} \PY{l+m+mi}{18}\PY{p}{]}\PY{p}{,}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dispatch}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{p}{[}\PY{n}{df\PYZus{}dispatch\PYZus{}wind}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{df\PYZus{}dispatch\PYZus{}wind}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}
+        \PY{p}{\PYZcb{}}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -911,38 +558,68 @@ p\_max\_pu to get the dispatched power. Setting p\_nom to one offers the
 possibility to leave the provided data as it is (in MWh).
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}45}]:} \PY{n}{network}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Generator}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Offshore Nordsee}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
-                \PY{n}{bus}\PY{o}{=}\PY{l+m+mi}{17}\PY{p}{,}
-                \PY{n}{carrier}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wind}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
-                \PY{n}{p\PYZus{}nom}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,}
-                \PY{n}{marginal\PYZus{}cost}\PY{o}{=}\PY{n}{marginal\PYZus{}costs\PYZus{}carrier}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wind}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}
-                \PY{c+c1}{\PYZsh{} p\PYZus{}min\PYZus{}pu and p\PYZus{}max\PYZus{}pu have to be the same to ensure fixed amount of dispatched power}
-                \PY{n}{p\PYZus{}min\PYZus{}pu}\PY{o}{=}\PY{n}{p\PYZus{}wind\PYZus{}generators}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}
-                \PY{n}{p\PYZus{}max\PYZus{}pu}\PY{o}{=}\PY{n}{p\PYZus{}wind\PYZus{}generators}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}
-                \PY{n}{committable}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
-         
-         \PY{n}{network}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Generator}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Offshore Ostsee}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
-                \PY{n}{bus}\PY{o}{=}\PY{l+m+mi}{18}\PY{p}{,}
-                \PY{n}{carrier}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wind}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
-                \PY{n}{p\PYZus{}nom}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,}
-                \PY{n}{marginal\PYZus{}cost}\PY{o}{=}\PY{n}{marginal\PYZus{}costs\PYZus{}carrier}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wind}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}
-                \PY{c+c1}{\PYZsh{} p\PYZus{}min\PYZus{}pu and p\PYZus{}max\PYZus{}pu have to be the same to ensure fixed amount of dispatched power}
-                \PY{n}{p\PYZus{}min\PYZus{}pu}\PY{o}{=}\PY{n}{p\PYZus{}wind\PYZus{}generators}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}
-                \PY{n}{p\PYZus{}max\PYZus{}pu}\PY{o}{=}\PY{n}{p\PYZus{}wind\PYZus{}generators}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}
-                \PY{n}{committable}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+{\color{incolor}In [{\color{incolor} }]:} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{df\PYZus{}info\PYZus{}wind}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+            \PY{n}{network}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Generator}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+               \PY{n}{name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Offshore }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{df\PYZus{}info\PYZus{}wind}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{p}{,}
+               \PY{n}{bus}\PY{o}{=}\PY{n}{df\PYZus{}info\PYZus{}wind}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bus}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+               \PY{n}{carrier}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wind}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+               \PY{n}{p\PYZus{}nom}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,}
+               \PY{n}{marginal\PYZus{}cost}\PY{o}{=}\PY{n}{marginal\PYZus{}costs\PYZus{}carrier}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wind}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}
+               \PY{c+c1}{\PYZsh{} p\PYZus{}min\PYZus{}pu and p\PYZus{}max\PYZus{}pu have to be the same to ensure fixed amount of dispatched power}
+               \PY{n}{p\PYZus{}min\PYZus{}pu}\PY{o}{=}\PY{n}{df\PYZus{}info\PYZus{}wind}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dispatch}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+               \PY{n}{p\PYZus{}max\PYZus{}pu}\PY{o}{=}\PY{n}{df\PYZus{}info\PYZus{}wind}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dispatch}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+               \PY{n}{committable}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)} 
+\end{Verbatim}
+
+
+    Attaching EE-Generation
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{9}\PY{p}{)}\PY{p}{:}
+            \PY{n}{tmp} \PY{o}{=} \PY{n}{s\PYZus{}dispatch\PYZus{}ee}\PY{o}{*}\PY{n}{statedistribution}\PY{p}{[}\PY{n}{i}\PY{p}{]}
+        \PY{c+c1}{\PYZsh{}     print(tmp)}
+            \PY{n}{network}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Generator}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{EE\PYZhy{}Generator }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{i}\PY{p}{)}\PY{p}{,}
+                        \PY{n}{bus}\PY{o}{=}\PY{n}{i}\PY{p}{,}
+                        \PY{n}{carrier}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ee}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                        \PY{n}{p\PYZus{}nom}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,}
+                        \PY{n}{marginal\PYZus{}cost}\PY{o}{=}\PY{n}{marginal\PYZus{}costs\PYZus{}carrier}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ee}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}
+                        \PY{n}{p\PYZus{}min\PYZus{}pu}\PY{o}{=}\PY{n}{tmp}\PY{p}{,}
+                        \PY{n}{p\PYZus{}max\PYZus{}pu}\PY{o}{=}\PY{n}{tmp}\PY{p}{,}
+                        \PY{n}{committable}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+
+
+    Adding nuclear power plants
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{k}{if} \PY{n}{include\PYZus{}fission}\PY{p}{:}
+            \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{9}\PY{p}{)}\PY{p}{:}
+                \PY{n}{tmp} \PY{o}{=} \PY{n}{s\PYZus{}dispatch\PYZus{}fission}\PY{o}{*}\PY{n}{statedistribution}\PY{p}{[}\PY{n}{i}\PY{p}{]}
+            \PY{c+c1}{\PYZsh{}     print(tmp)}
+                \PY{n}{network}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Generator}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Nuclear\PYZhy{}Generator }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{i}\PY{p}{)}\PY{p}{,}
+                            \PY{n}{bus}\PY{o}{=}\PY{n}{i}\PY{p}{,}
+                            \PY{n}{carrier}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Kernenergie}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                            \PY{n}{p\PYZus{}nom}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,}
+                            \PY{n}{marginal\PYZus{}cost}\PY{o}{=}\PY{n}{marginal\PYZus{}costs\PYZus{}carrier}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Kernenergie}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,}
+                            \PY{n}{p\PYZus{}min\PYZus{}pu}\PY{o}{=}\PY{n}{tmp}\PY{p}{,}
+                            \PY{n}{p\PYZus{}max\PYZus{}pu}\PY{o}{=}\PY{n}{tmp}\PY{p}{,}
+                            \PY{n}{committable}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
 \end{Verbatim}
 
 
     \subsubsection{Attaching Loads}\label{attaching-loads}
 
+    Convert demand to different periods if necessary
+
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}46}]:} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{:}
-             \PY{n}{demand\PYZus{}data\PYZus{}real} \PY{o}{=} \PY{n}{demand\PYZus{}file}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{i}\PY{p}{]}
-             \PY{n}{network}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Load}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
-                    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{myload}\PY{l+s+si}{\PYZob{}0\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{i}\PY{p}{)}\PY{p}{,}
-                    \PY{n}{bus}\PY{o}{=}\PY{n}{i}\PY{p}{,}
-                    \PY{c+c1}{\PYZsh{} take datapoints corresponding to timestamps in network.snapshots}
-                    \PY{n}{p\PYZus{}set}\PY{o}{=}\PY{p}{[}\PY{n}{demand\PYZus{}data\PYZus{}real}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{network}\PY{o}{.}\PY{n}{snapshots}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+{\color{incolor}In [{\color{incolor} }]:} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{9}\PY{p}{)}\PY{p}{:}
+        \PY{c+c1}{\PYZsh{}     demand\PYZus{}data\PYZus{}real = df\PYZus{}demand.iloc[:, i]}
+            \PY{c+c1}{\PYZsh{}print(i)}
+            \PY{n}{network}\PY{o}{.}\PY{n}{add}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Load}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                   \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{myload}\PY{l+s+si}{\PYZob{}0\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{i}\PY{p}{)}\PY{p}{,}
+                   \PY{n}{bus}\PY{o}{=}\PY{n}{i}\PY{p}{,}
+                   \PY{c+c1}{\PYZsh{} take datapoints corresponding to timestamps in network.snapshots}
+                   \PY{n}{p\PYZus{}set}\PY{o}{=}\PY{n}{df\PYZus{}demand}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{n}{i}\PY{p}{]}\PY{p}{)}
 \end{Verbatim}
 
 
@@ -950,167 +627,78 @@ possibility to leave the provided data as it is (in MWh).
 generators)}\label{linear-optimal-power-flow-incl.-unit-commitment-for-generators}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}47}]:} \PY{n}{network}\PY{o}{.}\PY{n}{lopf}\PY{p}{(}\PY{n}{solver\PYZus{}name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gurobi}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{network}\PY{o}{.}\PY{n}{lopf}\PY{p}{(}\PY{n}{network}\PY{o}{.}\PY{n}{snapshots}\PY{p}{,} \PY{n}{solver\PYZus{}name}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{gurobi}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-INFO:pypsa.pf:Slack bus for sub-network 0 is 0
-INFO:pypsa.opf:Performed preliminary steps
-INFO:pypsa.opf:Building pyomo model using `angles` formulation
-INFO:pypsa.opf:Solving model using gurobi
-INFO:pypsa.opf:Optimization successful
-
-    \end{Verbatim}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-\# ==========================================================
-\# = Solver Results                                         =
-\# ==========================================================
-\# ----------------------------------------------------------
-\#   Problem Information
-\# ----------------------------------------------------------
-Problem: 
-- Name: x14113
-  Lower bound: 8050514.12858
-  Upper bound: 8050514.12858
-  Number of objectives: 1
-  Number of constraints: 19201
-  Number of variables: 14113
-  Number of binary variables: 3168
-  Number of integer variables: 3168
-  Number of continuous variables: 10945
-  Number of nonzeros: 40576
-  Sense: minimize
-\# ----------------------------------------------------------
-\#   Solver Information
-\# ----------------------------------------------------------
-Solver: 
-- Status: ok
-  Return code: 0
-  Message: Model was solved to optimality (subject to tolerances), and an optimal solution is available.
-  Termination condition: optimal
-  Termination message: Model was solved to optimality (subject to tolerances), and an optimal solution is available.
-  Wall time: 0.338819503784
-  Error rc: 0
-  Time: 0.7778582572937012
-\# ----------------------------------------------------------
-\#   Solution Information
-\# ----------------------------------------------------------
-Solution: 
-- number of solutions: 0
-  number of solutions displayed: 0
-
-    \end{Verbatim}
-
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}47}]:} ('ok', 'optimal')
+{\color{incolor}In [{\color{incolor} }]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Objective: }\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}0:,\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{network}\PY{o}{.}\PY{n}{objective}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
-            
+
+
     \subsection{Exporting for Visualization \&
 Analysis}\label{exporting-for-visualization-analysis}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}48}]:} \PY{n}{f} \PY{o}{=} \PY{n+nb}{open}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{network.pickle}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{wb}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-         \PY{n}{dill}\PY{o}{.}\PY{n}{dump}\PY{p}{(}\PY{n}{network}\PY{p}{,} \PY{n}{f}\PY{p}{)}
-         \PY{n}{f}\PY{o}{.}\PY{n}{close}\PY{p}{(}\PY{p}{)}
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{path\PYZus{}tmp} \PY{o}{=} \PY{n}{path\PYZus{}pickle\PYZus{}data} \PY{o}{+} \PY{n}{create\PYZus{}date\PYZus{}format}\PY{p}{(}\PY{n}{period}\PY{p}{)} \PY{o}{+} \PY{n}{instance\PYZus{}info} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s2}{\PYZdq{}}
+        \PY{k}{if} \PY{o+ow}{not} \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{exists}\PY{p}{(}\PY{n}{path\PYZus{}tmp}\PY{p}{)}\PY{p}{:}
+            \PY{n}{os}\PY{o}{.}\PY{n}{mkdir}\PY{p}{(}\PY{n}{path\PYZus{}tmp}\PY{p}{)}
 \end{Verbatim}
 
-f = open("gen_names.pickle", "wb")
-dill.dump(gen_names, f)
-f.close()
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{filename} \PY{o}{=} \PY{n}{path\PYZus{}tmp} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{network}\PY{l+s+s2}{\PYZdq{}} \PY{o}{+} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{.pickle}\PY{l+s+s2}{\PYZdq{}}
+        
+        \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{n}{filename}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{wb}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{f}\PY{p}{:}
+            \PY{n}{pickle}\PY{o}{.}\PY{n}{dump}\PY{p}{(}\PY{n}{network}\PY{p}{,} \PY{n}{f}\PY{p}{)}
+\end{Verbatim}
+
+with open("gen_names.pickle", "wb") as f:
+    pickle.dump(gen_names, f)with open("network_demand.pickle", "wb") as f:
+    pickle.dump(df_demand, f)
     \subsection{Visualization}\label{visualization}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}49}]:} \PY{n}{gen\PYZus{}outs} \PY{o}{=} \PY{n}{network}\PY{o}{.}\PY{n}{generators\PYZus{}t}\PY{o}{.}\PY{n}{p}
-         \PY{c+c1}{\PYZsh{} No negative values for plotting}
-         \PY{n}{gen\PYZus{}outs}\PY{p}{[}\PY{n}{gen\PYZus{}outs} \PY{o}{\PYZlt{}} \PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{0}
-         \PY{n}{power\PYZus{}by\PYZus{}carrier} \PY{o}{=} \PY{n}{gen\PYZus{}outs}\PY{o}{.}\PY{n}{groupby}\PY{p}{(}\PY{n}{network}\PY{o}{.}\PY{n}{generators}\PY{o}{.}\PY{n}{carrier}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{gen\PYZus{}outs} \PY{o}{=} \PY{n}{network}\PY{o}{.}\PY{n}{generators\PYZus{}t}\PY{o}{.}\PY{n}{p}
+        \PY{c+c1}{\PYZsh{} No negative values for plotting}
+        \PY{n}{gen\PYZus{}outs}\PY{p}{[}\PY{n}{gen\PYZus{}outs} \PY{o}{\PYZlt{}} \PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{0}
+        \PY{n}{power\PYZus{}by\PYZus{}carrier} \PY{o}{=} \PY{n}{gen\PYZus{}outs}\PY{o}{.}\PY{n}{groupby}\PY{p}{(}\PY{n}{network}\PY{o}{.}\PY{n}{generators}\PY{o}{.}\PY{n}{carrier}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}50}]:} \PY{n}{graph\PYZus{}colors} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Erdgas}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{orange}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
-                         \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Braunkohle}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{brown}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
-                         \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Steinkohle}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{black}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
-                         \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wind}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{blue}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
-         
-         \PY{n}{col\PYZus{}order} \PY{o}{=} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wind}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Erdgas}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Steinkohle}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Braunkohle}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}51}]:} \PY{c+c1}{\PYZsh{} Rename columns for graph information}
-         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{gen\PYZus{}names}\PY{p}{)}\PY{p}{)}\PY{p}{:}
-             \PY{n}{gen\PYZus{}outs}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{i}\PY{p}{)}\PY{p}{)}\PY{p}{:}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{gen\PYZus{}names}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{\PYZcb{}}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
-\end{Verbatim}
-
-
-    Line graph to display the dispatched amount of energy per plant
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}52}]:} \PY{n}{network}\PY{o}{.}\PY{n}{objective}
-\end{Verbatim}
-
-
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}52}]:} 8050514.12858
-\end{Verbatim}
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{graph\PYZus{}colors} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Erdgas}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{orange}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                        \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Braunkohle}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{brown}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                        \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Steinkohle}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{black}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                        \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wind}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{blue}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                        \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ee}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{green}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                        \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Kernenergie}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{yellow}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                        \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Import}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{red}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}
+        
+        \PY{k}{if} \PY{n}{include\PYZus{}fission}\PY{p}{:}
+            \PY{n}{col\PYZus{}order} \PY{o}{=} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Kernenergie}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wind}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ee}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Braunkohle}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Steinkohle}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Erdgas}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Import}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+        \PY{k}{else}\PY{p}{:}
+            \PY{n}{col\PYZus{}order} \PY{o}{=} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Wind}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ee}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Braunkohle}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Steinkohle}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Erdgas}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Import}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
             
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}53}]:} \PY{n}{fig}\PY{p}{,}\PY{n}{ax} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
-         \PY{n}{fig}\PY{o}{.}\PY{n}{set\PYZus{}size\PYZus{}inches}\PY{p}{(}\PY{l+m+mi}{20}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}
-         
-         \PY{p}{(}\PY{n}{gen\PYZus{}outs}\PY{p}{)}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{kind}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{area}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{ax}\PY{o}{=}\PY{n}{ax}\PY{p}{,} \PY{n}{grid}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
-         
-         \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Snaps}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{MW}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-\end{Verbatim}
-
-
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}53}]:} Text(0,0.5,'MW')
-\end{Verbatim}
-            
-    \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_44_1.png}
-    \end{center}
-    { \hspace*{\fill} \\}
-    
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}54}]:} \PY{n}{fig}\PY{p}{,}\PY{n}{ax} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
-         \PY{n}{fig}\PY{o}{.}\PY{n}{set\PYZus{}size\PYZus{}inches}\PY{p}{(}\PY{l+m+mi}{30}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}
-         
-         \PY{n}{power\PYZus{}by\PYZus{}carrier}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{kind}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{area}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{ax}\PY{o}{=}\PY{n}{ax}\PY{p}{,} \PY{n}{grid}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{p}{[}\PY{n}{graph\PYZus{}colors}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{power\PYZus{}by\PYZus{}carrier}\PY{o}{.}\PY{n}{columns}\PY{p}{]}\PY{p}{)}
-         
-         \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Snaps}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{MW}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-\end{Verbatim}
-
-
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}54}]:} Text(0,0.5,'MW')
-\end{Verbatim}
-            
-    \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_45_1.png}
-    \end{center}
-    { \hspace*{\fill} \\}
-    
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}55}]:} \PY{n+nb}{print} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Hello World}\PY{l+s+s2}{\PYZdq{}}
+        \PY{n}{power\PYZus{}by\PYZus{}carrier} \PY{o}{=} \PY{n}{power\PYZus{}by\PYZus{}carrier}\PY{p}{[}\PY{n}{col\PYZus{}order}\PY{p}{]}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{n}{fig}\PY{p}{,}\PY{n}{ax} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{)}
+        \PY{n}{fig}\PY{o}{.}\PY{n}{set\PYZus{}size\PYZus{}inches}\PY{p}{(}\PY{l+m+mi}{30}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}
+        
+        \PY{n}{power\PYZus{}by\PYZus{}carrier}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{kind}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{area}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{ax}\PY{o}{=}\PY{n}{ax}\PY{p}{,} \PY{n}{grid}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{p}{[}\PY{n}{graph\PYZus{}colors}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{power\PYZus{}by\PYZus{}carrier}\PY{o}{.}\PY{n}{columns}\PY{p}{]}\PY{p}{)}
+        
+        \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Date}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{MWh}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
 
-          File "<ipython-input-55-2e860ebf713e>", line 1
-        print "Hello World"
-                          \^{}
-    SyntaxError: Missing parentheses in call to 'print'. Did you mean print("Hello World")?
-    
 
-    \end{Verbatim}
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Hello World}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+
 
 
     % Add a bibliography block to the postdoc
