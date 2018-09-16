@@ -1,5 +1,0 @@
-id,name,bus0,bus1,len,cap,wid
-0,myline0,0,1,40,3000,0.0001
-1,myline1,1,2,31.6,3000,0.0001
-2,myline2,2,0,31.6,3000,0.0001
-3,offshoreline,3,2,40,6000,0.0001

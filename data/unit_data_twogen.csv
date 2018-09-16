@@ -1,4 +1,0 @@
-name,bus,committable,carrier,marg. Cost,min power,startup costs,nom power,efficiency
-Wind Offshore,3,1,wind,5,0,0,75,0.45
-Gasturbine,1,1,gas,50,0.2,5000,200,0.38
-GuD,2,1,gas,35,0.2,6000,200,0.6
